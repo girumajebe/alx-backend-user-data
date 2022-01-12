@@ -1,97 +1,70 @@
-# 0x01 User authentication service
+# 0x0. Basic authentication
 
 ## Description
 
 What you should learn from this project:
 
----
-
-### [0. User model](./user.py)
-
-* In this task you will create a SQLAlchemy model named User for a database table named users (by using the mapping declaration of SQLAlchemy).
-
-### [1. create user](./db.py)
-
-* In this task, you will complete the DB class provided below to implement the add_user method.
-
-### [2. Find user](./db.py)
-
-* In this task you will implement the DB.find_user_by method. This method takes in arbitrary keyword arguments and returns the first row found in the users table as filtered by the method’s input arguments. No validation of input arguments required at this point.
-
-### [3. update user](./db.py)
-
-* In this task, you will implement the DB.update_user method that takes as argument a required user_id integer and arbitrary keyword arguments, and returns None.
-
-### [4. Hash password](./auth.py)
-
-* In this task you will define a _hash_password method that takes in a password string arguments and returns a string.
-
-### [5. Register user](./auth.py)
-
-* In this task, you will implement the Auth.register_user in the Auth class provided below:
-
-### [6. Basic Flask app](./app.py)
-
-* In this task, you will set up a basic Flask app.
-
-### [7. Register user](./app.py)
-
-* In this task, you will implement the end-point to register a user. Define a users function that implements the POST /users route.
-
-### [8. Credentials validation](./auth.py)
-
-* In this task, you will implement the Auth.valid_login method. It should expect email and password required arguments and return a boolean.
-
-### [9. Generate UUIDs](./auth.py)
-
-* In this task you will implement a _generate_uuid function in the auth module. The function should return a string representation of a new UUID. Use the uuid module.
-
-### [10. Get session ID](./auth.py)
-
-* In this task, you will implement the Auth.create_session method. It takes an email string argument and returns the session ID as a string.
-
-### [11. Log in](./app.py)
-
-* In this task, you will implement a login function to respond to the POST /sessions route.
-
-### [12. Find user by session ID](./auth.py)
-
-* In this task, you will implement the Auth.get_user_from_session_id method. It takes a single session_id string argument and returns a string or None.
-
-### [13. Destroy session](./auth.py)
-
-* In this task, you will implement Auth.destroy_session. The method takes a single user_id integer argument and returns None.
-
-### [14. Log out](./app.py)
-
-* In this task, you will implement a logout function to respond to the DELETE /sessions route.
-
-### [15. User profile](./app.py)
-
-* In this task, you will implement a profile function to respond to the GET /profile route.
-
-### [16. Generate reset password token](./auth.py)
-
-* In this task, you will implement the Auth.get_reset_password_token method. It take an email string argument and returns a string.
-
-### [17. Get reset password token](./app.py)
-
-* In this task, you will implement a get_reset_password_token function to respond to the POST /reset_password route.
-
-### [18. Update password](./auth.py)
-
-* In this task, you will implement the Auth.update_password method. It takes reset_token string argument and a password string argument and returns None.
-
-### [19. Update password end-point](./app.py)
-
-* In this task you will implement the update_password function in the app module to respond to the PUT /reset_password route.
-
-### [20. End-to-end integration test](./main.py)
-
-* Start your app. Open a new terminal window.
+* What authentication means
+* What Base64 is
+* How to encode a string in Base64
+* What Basic authentication means
+* How to send the Authorization header
 
 ---
 
+### [0. Simple-basic-API](./api/v1/app.py)
+
+* Download and start your project from this archive.zip
+
+### [1. Error handler: Unauthorized](./api/v1/app.py)
+
+* What the HTTP status code for a request unauthorized? 401 of course!
+
+### [2. Error handler: Forbidden](./api/v1/auth)
+
+* What the HTTP status code for a request where the user is authenticate but not allowed to access to a resource? 403 of course!
+
+### [3. Auth class](./api/v1/auth/auth.py)
+
+* Now you will create a class to manage the API authentication.
+
+### [4. Define which routes don't need authentication](./api/v1/app.py)
+
+* Update the method def require_auth(self, path: str, excluded_paths: List[str]) -> bool: in Auth that returns True if the path is not in the list of strings excluded_paths:
+
+### [5. Request validation!](./api/v1/app.py)
+
+* Now you will validate all requests to secure the API:
+
+### [6. Basic auth](./api/v1/auth/basic_auth.py)
+
+* Create a class BasicAuth that inherits from Auth. For the moment this class will be empty.
+
+### [7. Basic - Base64 part](./api/v1/auth/basic_auth.py)
+
+* Add the method def extract_base64_authorization_header(self, authorization_header: str) -> str: in the class BasicAuth that returns the Base64 part of the Authorization header for a Basic Authentication:
+
+### [8. Basic - Base64 decode](./api/v1/auth/basic_auth.py)
+
+* Add the method def decode_base64_authorization_header(self, base64_authorization_header: str) -> str: in the class BasicAuth that returns the decoded value of a Base64 string base64_authorization_header:
+
+### [9. Basic - User credentials](./api/v1/auth/basic_auth.py)
+
+* Add the method def extract_user_credentials(self, decoded_base64_authorization_header: str) -> (str, str) in the class BasicAuth that returns the user email and password from the Base64 decoded value.
+
+### [10. Basic - User object](./api/v1/auth/basic_auth.py)
+
+* Add the method def user_object_from_credentials(self, user_email: str, user_pwd: str) -> TypeVar('User'): in the class BasicAuth that returns the User instance based on his email and password.
+
+### [11. Basic - Overload current_user - and BOOM!](./api/v1/auth/basic_auth.py)
+
+* Now, you have all pieces for having a complete Basic authentication.
+
+### [12. Basic - Allow password with ":"](./api/v1/auth/auth.py)
+
+* Improve the method def extract_user_credentials(self, decoded_base64_authorization_header) to allow password with :.
+
+---
 
 
 
